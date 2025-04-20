@@ -1,0 +1,41 @@
+The Challenge
+Develop an application which solves the following problem:
+You have some data about shapes (rectangles, circles, triangles etc.) in JSON lines format e.g.
+
+{"type": "rectangle", "width": 5, "height": 10}
+{"type": "triangle", "base": 2, "height": 3}
+{"type": "circle", "radius": 4}
+{"type": "rectangle", "width": 5, "height": 5}
+
+The application should calculate the total area of all the shapes in the data set.
+
+Things to consider:
+The purpose of this challenge is to get an insight into how you approach software development
+and what quality software looks like to you. We’ve made the problem itself deliberately simple
+so you can focus on highlighting your skills in this area.
+• We know this problem can be solved in several different ways, so we encourage you to use
+any tools or frameworks you are comfortable with. And just in case you are curious about
+our tech stack, our preferred language in the data space is Python, and we make heavy use of
+Apache Spark for data wrangling.
+• If you believe that executing your code would enhance the reviewing experience and/or
+demonstrate your skills more effectively, please take runnability into consideration when sharing
+your solution.
+
+
+Initial thoughts
+
+# 1. Load Data - Because the dataset is small, the entire set could be loaded from JSON into a python dictionary. However this would not be 
+ scalable if the dataset were to grow. 
+
+# 2. Calculating Shape Area - These could be written as basic functions, but as all the items in the dataset are 'shapes' I could initialise
+an abstract shape class, with the specific shape child classes. Eg class Triangle(Shape).
+
+# 3. A few things that are unclear:
+  - Instructions say to calculate the total area of ALL the shapes in the data set, not EACH shape. ASSUMPTION: Calculate each area and combine to get the TOTAL area. 
+  - The problem mentions JSON lines format, not that these lines are in a JSON file specifically. For the purposes of this application, 
+    I am going to put these lines in a JSON file and read from the file. 
+
+Follow up
+
+!. Made everything Python dicts
+2. Replaced dicts with Pyspark Row types

@@ -1,4 +1,6 @@
 #TODO add module level docstrings
+
+
 from pyspark.sql import SparkSession
 from pyspark.sql import Row
 from pyspark.sql.functions import col, lower
@@ -29,6 +31,7 @@ def initialise_shape_class(shape_type: str, row: Row) -> Shape:
     else:
         raise ValueError(f"Invalid shape type: {shape_type}")
 
+
 def compute_area(row: Row) -> float: 
     """
      Takes a Row, determines what shape it is, and returns the area.
@@ -56,6 +59,7 @@ def compute_area(row: Row) -> float:
 # assuming the shape "type" will either be spelled correctly or else caught as an invalid shape in initialise_shape()),
 # but it might occasionally appear in a different casing (e.g., "Circle", "RECTANGLE").
 # This just ensures consistency before checking against the list of valid shape types.
+
 
 def process_shapes():
     """

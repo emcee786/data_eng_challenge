@@ -2,9 +2,11 @@
 This module handles shape creation and area calculation.
 
 Includes:
-    Shape abstract class
-    Triangle, Circle and Rectangle classes
+    Shape abstract base class
+    Triangle, Circle and Rectangle subclasses
 
+    Shape ABC requires all subclasses to contain calculate_area() method
+    Shapes are instatiated from pyspark "row" type using named columns
 """
 
 

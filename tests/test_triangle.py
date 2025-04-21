@@ -9,6 +9,7 @@ Covers:
 Only includes Triangle for now — more would be added in a full test suite.
 """
 
+
 import re
 import pytest
 from pyspark.sql import Row
@@ -48,6 +49,7 @@ def test_triangle_missing_height():
     (5, -1),      
 ], ids=["zero base", "zero height", "negative base", "negative height"])
 
+
 def test_triangle_invalid_dimensions(base, height):
     row=Row(base=base, height=height)
     with pytest.raises(ValueError, match=re.escape("Base and height must be greater than zero")):
@@ -60,6 +62,7 @@ def test_triangle_invalid_dimensions(base, height):
     (None, 5),
     (5, None),
 ], ids=["base not numeric", "height not numeric", "base is None", "height is None"])
+
 
 def test_triangle_non_numeric_input(base, height):
     row = Row(base=base, height=height)

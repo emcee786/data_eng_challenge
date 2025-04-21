@@ -6,7 +6,7 @@ from pyspark.sql import Row
 from pyspark.sql.functions import col, lower
 
 from plexure_challenge.shapes import Triangle, Circle, Rectangle, Shape
-from plexure_challenge.logging import logger
+from plexure_challenge.logging_utils import logger
 
 
 def initialise_shape_class(shape_type: str, row: Row) -> Shape:

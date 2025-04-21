@@ -1,5 +1,16 @@
-#TODO add module level docstrings
+"""
+Processes shape data using PySpark.
 
+Loads shapes from JSON, maps each to a class (Triangle, Circle, Rectangle),
+calculates areas, and prints the total.
+
+Functions:
+- initialise_shape_class: Picks the right shape class.
+- compute_area: Builds shape and returns area.
+- process_shapes: Loads data, maps areas, logs result.
+
+Assumes each row has a 'type' and valid dimensions. Uses RDDs for processing.
+"""
 
 from pyspark.sql import SparkSession
 from pyspark.sql import Row

@@ -1,8 +1,18 @@
+""" 
+This module handles shape creation and area calculation.
+
+Includes:
+    Shape abstract class
+    Triangle, Circle and Rectangle classes
+
+"""
+
+
 from abc import ABC, abstractmethod
 from pyspark.sql import Row
 from math import pi
 
-from .utils import logger
+from .logging import logger
 
 
 ## DICTIONARIES → ROWS

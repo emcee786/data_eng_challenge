@@ -1,12 +1,13 @@
+#TODO add module level docstrings
 from pyspark.sql import SparkSession
 from pyspark.sql import Row
 from pyspark.sql.functions import col, lower
 
 from plexure_challenge.shapes import Triangle, Circle, Rectangle, Shape
-from plexure_challenge.utils import logger
+from plexure_challenge.logging import logger
 
 
-def initialise_shape_class(shape_type: str, row: Row)-> Shape:
+def initialise_shape_class(shape_type: str, row: Row) -> Shape:
     """
     Takes the shape type and row, and returns the right Shape object.
     Args:
@@ -28,7 +29,7 @@ def initialise_shape_class(shape_type: str, row: Row)-> Shape:
     else:
         raise ValueError(f"Invalid shape type: {shape_type}")
 
-def compute_area(row: Row):
+def compute_area(row: Row) -> float: 
     """
      Takes a Row, determines what shape it is, and returns the area.
         Args:
@@ -67,9 +68,9 @@ def process_shapes():
     4. Sum all valid areas and print the result.
     """
     spark = SparkSession.builder.appName("ShapeData").getOrCreate()
-    df = spark.read.json('src/plexure_challenge/data.json')
-    df = df.withColumn("type", lower(col("type"))) 
-    areas_rdd = df.rdd.map(compute_area)
+    shape_data = spark.read.json('src/plexure_challenge/data.json') 
+    shape_data = shape_data.withColumn("type", lower(col("type"))) 
+    areas_rdd = shape_data.rdd.map(compute_area)
 
     total_area = areas_rdd.sum()
     logger.info(f"Total area: {total_area:.2f}")

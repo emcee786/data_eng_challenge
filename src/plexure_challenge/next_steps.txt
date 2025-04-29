@@ -1,0 +1,25 @@
+Things that I would need to confirm if continuing to build:
+
+Should the script break on error or log and continue?
+(First iteration broke, second iteration logs and moves on — need to confirm expected behavior.)
+
+Will this need to scale to more shape types (e.g., Hexagon, Square)?
+And/or support more functions like calculate_perimeter?
+(If so, might rethink the base Shape class design a little to be more flexible.)
+
+How big are the expected datasets?
+If it's small, the current setup might be fine. If it's large, I'd probably need to move more into full DataFrame operations to keep it optimised.
+
+Could new columns be added to the .jsonl file?
+(e.g., is_valid, shape_area added during processing.)
+
+If yes, would it be better to stay in the PySpark DataFrame layer more often?
+(e.g., validate fields and types directly in the DataFrame, instead of after converting to RDD.)
+
+
+
+Possible tools to explore further:
+
+PySpark Schemas and StructTypes for stricter input validation.
+(Could define expected columns and types up front.)
+

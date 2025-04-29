@@ -10,12 +10,8 @@ And/or support more functions like calculate_perimeter?
 How big are the expected datasets?
 If it's small, the current setup might be fine. If it's large, I'd probably need to move more into full DataFrame operations to keep it optimised.
 
-Could new columns be added to the .jsonl file?
-(e.g., is_valid, shape_area added during processing.)
-
 If yes, would it be better to stay in the PySpark DataFrame layer more often?
 (e.g., validate fields and types directly in the DataFrame, instead of after converting to RDD.)
-
 
 
 Possible tools to explore further:

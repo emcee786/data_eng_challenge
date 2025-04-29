@@ -12,8 +12,8 @@ Functions:
 Assumes each row has a 'type' and valid dimensions. Uses RDDs for processing.
 """
 
-from pyspark.sql import DataFrame, Row, SparkSession
-from pyspark.sql.functions import col, lower, lit
+from pyspark.sql import Row, SparkSession
+from pyspark.sql.functions import col, lower
 
 from plexure_challenge.shapes import Triangle, Circle, Rectangle, Shape
 from plexure_challenge.logging_utils import logger
@@ -39,35 +39,44 @@ def initialise_shape_class(shape_type: str, row: Row) -> Shape:
     elif shape_type == "rectangle":
         return Rectangle(row)
     else:
-        logger.error(f"Invalid shape type: {shape_type}") # Leaving here for now, but likely better to have this check in validate_row()
-
+        raise ValueError(f"Invalid shape type: {shape_type}") #Invalid shape would break script. Should it log and continue?
+    
 # Moving error handling out of the Shape constructors and ensuring the script logs errors rather than breaking, based on feedback.
 # I believe there's a better way to handle this using more of PySpark's capabilities.
-# I've currently assigned shape_fields as a global, which I'm not completely happy with.
-# In my exploration of PySpark, I think there's likely a cleaner or more scalable way to manage this.
-
-shape_fields = {
-    "triangle": ["base", "height"],
-    "rectangle": ["width", "height"],
-    "circle": ["radius"]
-}
 
 def validate_row_fields(row: Row, fields: list):
+    """
+    Validates that the required fields are present, castable to float, and greater than zero.
+    
+    Args:
+        row (Row): A Spark Row.
+        fields (list): List of required field names.
+    
+    Returns:
+        bool: True if valid, False otherwise.
+    """
     for field in fields:
         value = getattr(row, field, None)
 
         if value is None:
-            logger.error(f"Validation Error - Missing field: {field}")
+            logger.error(f"Validation Error - Missing field '{field}'."
+                         f"Row contents: {row.asDict()}")
             return False
         
         try:
             value_float = float(value)
         except (TypeError, ValueError):
-            logger.error(f"Type error - Field '{field}' cannot be cast to float. Got type: {type(value)}")
+            logger.error(
+                f"Type Error - Field '{field}' cannot be cast to float. (Got type: {type(value).__name__})"
+                f"Row contents: {row.asDict()} "
+                
+            )
     
         if value_float <= 0:
-            logger.error(f"Validation error - Field '{field}' must be greater than zero in row: {row}. Got: {value_float}")
-            return False
+            logger.error(
+                f"Validation Error - Field '{field}' must be greater than zero. Got value: {value_float}. "
+                f"Row contents: {row.asDict()}"
+            )
         
     return True
 
@@ -87,15 +96,16 @@ def compute_area(row: Row) -> float:
         shape_type = row.type.lower()
 
         shape = initialise_shape_class(shape_type, row)
+
+        if not validate_row_fields(row, shape.required_fields):
+            logger.error(f"Field validation failed for shape {shape_type}")
+            return 0.0
+        
         return shape.calculate_area()
+    
     except Exception as e:
         logger.error(f"Error computing area for row {row}: {e}")
-        return None
-
-
-
-
-    
+        return 0.0
 
 ## Using lower()
 # All shape types in the dataset are already lowercase.
@@ -103,8 +113,6 @@ def compute_area(row: Row) -> float:
 # assuming the shape "type" will either be spelled correctly or else caught as an invalid shape in initialise_shape()),
 # but it might occasionally appear in a different casing (e.g., "Circle", "RECTANGLE").
 # This just ensures consistency before checking against the list of valid shape types.
-
-
 
 def process_shapes():
     """

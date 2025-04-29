@@ -36,6 +36,7 @@ def test_triangle_initialises_with_numeric_strings():
     assert triangle.height == 4.0
 
 
+# This Test likely unnecessary if validation is handled properly before initialization.
 def test_triangle_missing_height():
     row = Row(base=3) 
     with pytest.raises(AttributeError):

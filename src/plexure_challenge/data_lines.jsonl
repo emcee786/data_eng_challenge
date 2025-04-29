@@ -1,4 +1,7 @@
 { "type": "rectangle", "width": 5, "height": 10 }
+{ "type": "circle", "diameter": 7 }
 { "type": "triangle", "base": 2, "height": 3 }
 { "type": "circle", "radius": 4 }
 { "type": "rectangle", "width": 5, "height": 5 }
+{ "type": "triangle", "base": 0, "height": 3 }
+{ "type": "square", "width": 5, "height": 5 }

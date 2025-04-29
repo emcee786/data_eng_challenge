@@ -35,9 +35,10 @@ from .logging_utils import logger
 class Shape(ABC):
     "An abstract base class for geometric shapes that can calculate their area"
 
+    required_fields = []
+
     def __init__(self, row: Row):
         self.row = row
-        # I could change the type to lower() here.
         logger.info(f"Initializing base Shape with data: {row}")
 
     @abstractmethod
@@ -47,6 +48,7 @@ class Shape(ABC):
     
 
 class Triangle(Shape):
+    required_fields = ["base", "height"]
     
     def __init__(self, row: Row):
         """
@@ -84,6 +86,8 @@ class Triangle(Shape):
         
 
 class Circle(Shape):
+    required_fields = ["radius"]
+
     def __init__(self, row: Row):
         """
         Initializes a Circle instance.
@@ -120,6 +124,8 @@ class Circle(Shape):
 
 
 class Rectangle(Shape):
+   required_fields = ["width", "height"]
+
    def __init__(self, row: Row):
         """
         Initializes a Triangle instance.

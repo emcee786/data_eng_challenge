@@ -83,8 +83,8 @@ def process_shapes():
     4. Sum all valid areas and print the result.
     """
     spark = SparkSession.builder.appName("ShapeData").getOrCreate()
-    shape_data = spark.read.json('src/plexure_challenge/data.json') 
-    shape_data = shape_data.withColumn("type", lower(col("type"))) 
+    shape_data = spark.read.json('src/plexure_challenge/data_lines.jsonl') 
+    shape_data = shape_data.withColumn("type", lower(col("type")))
     areas_rdd = shape_data.rdd.map(compute_area)
 
     total_area = areas_rdd.sum()

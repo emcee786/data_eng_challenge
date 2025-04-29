@@ -36,6 +36,8 @@ class Shape(ABC):
     "An abstract base class for geometric shapes that can calculate their area"
 
     def __init__(self, row: Row):
+        self.row = row
+        # I could change the type to lower() here.
         logger.info(f"Initializing base Shape with data: {row}")
 
     @abstractmethod
@@ -45,6 +47,7 @@ class Shape(ABC):
     
 
 class Triangle(Shape):
+    
     def __init__(self, row: Row):
         """
         Initializes a Triangle instance.
@@ -55,6 +58,8 @@ class Triangle(Shape):
             TypeError: If base or height cannot be cast to float
             AttributeError: If base or height are not present. 
         """
+        super().__init__(row) 
+
         try:
             self.base = float(row.base)
             self.height = float(row.height)
@@ -89,6 +94,8 @@ class Circle(Shape):
             TypeError: If radius cannot be cast to float
             AttributeError: If radius is not present. 
         """
+        super().__init__(row)
+        
         try:
             self.radius = float(row.radius)
 
@@ -123,6 +130,8 @@ class Rectangle(Shape):
             TypeError: If width or height cannot be cast to float
             AttributeError: If width or height are not present. 
         """
+        super().__init__(row) 
+
         try:
             self.width = float(row.width)
             self.height = float(row.height)

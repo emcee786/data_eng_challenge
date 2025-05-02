@@ -12,8 +12,10 @@ Functions:
 Assumes each row has a 'type' and valid dimensions. Uses RDDs for processing.
 """
 
-from pyspark.sql import Row, SparkSession
-from pyspark.sql.functions import col, lower
+from pyspark.sql import Row, SparkSession, DataFrame
+from pyspark.sql.functions import col, lower, lit
+from pyspark.sql.functions import sum as sp_sum
+from math import pi
 
 from plexure_challenge.shapes import Triangle, Circle, Rectangle, Shape
 from plexure_challenge.logging_utils import logger
@@ -107,12 +109,6 @@ def compute_area(row: Row) -> float:
         logger.error(f"Error computing area for row {row}: {e}")
         return 0.0
 
-## Using lower()
-# All shape types in the dataset are already lowercase.
-# I’ve kept the line: df = df.withColumn("type", lower(col("type"))) as a safeguard —
-# assuming the shape "type" will either be spelled correctly or else caught as an invalid shape in initialise_shape()),
-# but it might occasionally appear in a different casing (e.g., "Circle", "RECTANGLE").
-# This just ensures consistency before checking against the list of valid shape types.
 
 def process_shapes():
     """
@@ -131,7 +127,73 @@ def process_shapes():
 
     total_area = areas_rdd.sum()
     logger.info(f"Total area: {total_area:.2f}")
+
+## Attempting a second go at this, relying on Pyspark for validation.
+
+def validate_rectangles(df: DataFrame) -> DataFrame:
+     return df.filter(
+        (col("type") == "rectangle") &
+        (col("width").isNotNull()) & (col("height").isNotNull()) &
+        (col("width") > 0) & (col("height") > 0)
+    )
+
+def validate_circles(df: DataFrame) -> DataFrame:
+     return df.filter(
+        (col("type") == "circle") &
+        (col("radius").isNotNull()) &
+        (col("radius") > 0)
+    )
+
+def validate_triangles(df: DataFrame) -> DataFrame:
+     return df.filter(
+        (col("type") == "triangle") &
+        (col("base").isNotNull()) & (col("height").isNotNull()) &
+        (col("base") > 0) & (col("height") > 0)
+    )
+
+def add_triangle_area(df:DataFrame) -> DataFrame:
+    return df.withColumn("area", (col("base") * col("height")) / 2)
+
+def add_circle_area(df:DataFrame) -> DataFrame:
+    return df.withColumn("area", lit(pi) * pow(col("radius"), 2))
+
+def add_rectangle_area(df:DataFrame) -> DataFrame:
+    return df.withColumn("area", (col("width") * col("height")))
     
+def new_process():
+    spark = SparkSession.builder.appName("ShapeData").getOrCreate()
+    shape_dataframe = spark.read.json('src/plexure_challenge/data_lines.jsonl') 
+    shape_dataframe = shape_dataframe.withColumn("type", lower(col("type")))
+    
+    # Process Triangles
+    valid_triangles = validate_triangles(shape_dataframe)
+    triangles_with_area = add_triangle_area(valid_triangles)
+
+    # Process Circles
+    valid_circles = validate_circles(shape_dataframe)
+    circles_with_area = add_circle_area (valid_circles)
+    
+    # Process Rectangles
+    valid_rectangle = validate_rectangles(shape_dataframe)
+    rectangles_with_area = add_rectangle_area(valid_rectangle)
+    
+    # Show area
+    circles_with_area.show()
+    triangles_with_area.show()
+    rectangles_with_area.show()
+
+    triangle_total_area = triangles_with_area.select(sp_sum("area")).first()[0]
+    circle_total_area = circles_with_area.select(sp_sum("area")).first()[0]
+    rectangle_total_area = rectangles_with_area.select(sp_sum("area")).first()[0]
+
+    # Calculate total area
+    total_area = triangle_total_area + circle_total_area + rectangle_total_area
+    
+    logger.info(f"The total area of all valid shapes is: {total_area:.2f}")
+
+ 
+
 
 if __name__ == "__main__":
-    process_shapes()
+    # process_shapes()
+    new_process()

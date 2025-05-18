@@ -15,8 +15,8 @@ Assumes each row has a 'type' and valid dimensions. Uses RDDs for processing.
 from pyspark.sql import Row, SparkSession
 from pyspark.sql.functions import col, lower
 
-from plexure_challenge.shapes import Triangle, Circle, Rectangle, Shape
-from plexure_challenge.logging_utils import logger
+from de_challenge.logging_utils import logger
+from de_challenge.shapes import Circle, Rectangle, Shape, Triangle
 
 
 def initialise_shape_class(shape_type: str, row: Row) -> Shape:
@@ -39,9 +39,11 @@ def initialise_shape_class(shape_type: str, row: Row) -> Shape:
     elif shape_type == "rectangle":
         return Rectangle(row)
     else:
-        raise ValueError(f"Invalid shape type: {shape_type}") #Invalid shape would break script. Should it log and continue?
-    
-# Moving error handling out of the Shape constructors and ensuring the script logs errors rather than breaking, based on feedback.
+        raise ValueError(f"Invalid shape type: {shape_type}") 
+        #Invalid shape would break script. Should it log and continue?
+
+# Moving error handling out of the Shape constructors and ensuring the script logs 
+# errors rather than breaking, based on feedback.
 # I believe there's a better way to handle this using more of PySpark's capabilities.
 
 def validate_row_fields(row: Row, fields: list):
@@ -110,7 +112,8 @@ def compute_area(row: Row) -> float:
 ## Using lower()
 # All shape types in the dataset are already lowercase.
 # I’ve kept the line: df = df.withColumn("type", lower(col("type"))) as a safeguard —
-# assuming the shape "type" will either be spelled correctly or else caught as an invalid shape in initialise_shape()),
+# assuming the shape "type" will either be spelled correctly or else caught as 
+# an invalid shape in initialise_shape()),
 # but it might occasionally appear in a different casing (e.g., "Circle", "RECTANGLE").
 # This just ensures consistency before checking against the list of valid shape types.
 

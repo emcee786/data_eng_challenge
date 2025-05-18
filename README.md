@@ -1,9 +1,9 @@
-# Requirements / Setup
+## Requirements / Setup
 This project runs PySpark on a Linux machine. You will need:
 
-Python 3.11+
-Java 11 SDK
-Poetry (for managing dependencies and virtual environments)
+- Python 3.11+
+- Java 11 SDK
+- Poetry (for managing dependencies and virtual environments)
 
 Install Java 11 SDK - run the following commands:
 
@@ -24,7 +24,7 @@ Run the application:
 `PYTHONPATH=src poetry run python src/plexure_challenge/app.py`
 
 
-RUNNING TESTS
+# Running Tests
 
 Pytest is used for unit testing.
 

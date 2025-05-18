@@ -1,21 +1,37 @@
 [project]
-name = "plexure-challenge"
+name = "data-eng-challenge"
 version = "0.1.0"
 description = ""
 authors = [
-    {name = "Emma Corkery",email = "em.corkery2@gmail.com"}
+    {name = "Emma"}
 ]
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "pytest (>=8.3.5,<9.0.0)",
-    "pyspark (>=3.5.5,<4.0.0)"
+    "pyspark (>=3.5.5,<4.0.0)",
+    "pre-commit (>=4.2.0,<5.0.0)"
 ]
 
 [tool.poetry]
-packages = [{include = "plexure_challenge", from = "src"}]
+packages = [{include = "de_challenge", from = "src"}]
 
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.11.10"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 110
+target-version = "py39"
+
+[tool.ruff.lint]
+select =[
+  "E",   # pycodestyle
+  "F",   # pyflakes
+  "UP",  # pyupgrade,
+  "I",   # isort
+]

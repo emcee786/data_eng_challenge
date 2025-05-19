@@ -46,8 +46,7 @@ This will:
 
 Run the application:
 
-`PYTHONPATH=src poetry run python src/de_challenge/app.py`
-
+`poetry run start`
 
 # Running Tests
 

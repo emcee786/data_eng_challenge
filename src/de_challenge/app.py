@@ -135,6 +135,8 @@ def process_shapes():
     total_area = areas_rdd.sum()
     logger.info(f"Total area: {total_area:.2f}")
     
+def main():
+    process_shapes()
 
 if __name__ == "__main__":
     process_shapes()

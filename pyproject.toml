@@ -1,20 +1,18 @@
-[project]
+[tool.poetry]
 name = "data-eng-challenge"
 version = "0.1.0"
-description = ""
-authors = [
-    {name = "Emma"}
-]
-readme = "README.md"
-requires-python = ">=3.11"
-dependencies = [
-    "pytest (>=8.3.5,<9.0.0)",
-    "pyspark (>=3.5.5,<4.0.0)",
-]
-
-[tool.poetry]
+description = "Data engineering challenge app"
+authors = ["Emma"]
 packages = [{include = "de_challenge", from = "src"}]
+readme = "README.md"
 
+[tool.poetry.dependencies]
+python = ">=3.11"
+pytest = ">=8.3.5,<9.0.0"
+pyspark = ">=3.5.5,<4.0.0"
+
+[tool.poetry.scripts]
+start = "de_challenge.app:main"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.11.10"
